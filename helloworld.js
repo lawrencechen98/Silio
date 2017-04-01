@@ -17,7 +17,7 @@ bot.dialog('/', [
 
         var execFile = require('child_process').execFile;
 
-        execFile('./MyNav',['./src/mapdata.txt', session.userData.start, session.userData.end], function(err, data) {
+        execFile('./MyNav',['./src/locationdata.txt', session.userData.start, session.userData.end], function(err, data) {
             if(err) {
                 console.log(err)
             }else
