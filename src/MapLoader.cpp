@@ -15,6 +15,7 @@ public:
 	bool getSegment(size_t segNum, StreetSegment& seg) const;
     
 private:
+    vector<Attraction> attractions;
     vector<StreetSegment> streetSegments;
 };
 
@@ -94,6 +95,7 @@ bool MapLoaderImpl::load(string mapFile)
                     newAttraction.geocoordinates = GeoCoord(lat, lon);
                     newAttraction.price = 0;
                     newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
+                    attractions.push_back(newAttraction);
                 }else{
                     string lon = attraction.substr(0, attraction.find("|"));
                     while(lon[lon.size()-1] == ' ')
@@ -104,6 +106,7 @@ bool MapLoaderImpl::load(string mapFile)
                     newAttraction.geocoordinates = GeoCoord(lat, lon);
                     newAttraction.price = stoi(attraction);
                     newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
+                    attractions.push_back(newAttraction);
                 }
             }
             streetSegments.push_back(newStreet);    //push new street into vectors of street
