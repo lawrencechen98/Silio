@@ -86,11 +86,25 @@ bool MapLoaderImpl::load(string mapFile)
                 attraction = attraction.substr(attraction.find(",") + 1);
                 while(attraction[0] == ' ' || attraction[0] == ',')
                     attraction.erase(0, 1);
-                while(attraction[attraction.size()-1] == ' ')
-                    attraction.erase(attraction.size()-1, 1);
-                string lon = attraction;
-                newAttraction.geocoordinates = GeoCoord(lat, lon);
-                newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
+                std::size_t index = attraction.find("|");
+                if(index == std::string::npos){
+                    while(attraction[attraction.size()-1] == ' ')
+                        attraction.erase(attraction.size()-1, 1);
+                    string lon = attraction;
+                    newAttraction.geocoordinates = GeoCoord(lat, lon);
+                    newAttraction.price = 0;
+                    newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
+                }else{
+                    string lon = attraction.substr(0, attraction.find("|"));
+                    while(lon[lon.size()-1] == ' ')
+                        lon.erase(lon.size()-1, 1);
+                    attraction = attraction.substr(attraction.find("|") + 1);
+                    while(attraction[0] == ' ')
+                        attraction.erase(0, 1);
+                    newAttraction.geocoordinates = GeoCoord(lat, lon);
+                    newAttraction.price = stoi(attraction);
+                    newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
+                }
             }
             streetSegments.push_back(newStreet);    //push new street into vectors of street
         }

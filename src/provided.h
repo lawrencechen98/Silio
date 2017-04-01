@@ -37,6 +37,7 @@ struct Attraction
 {
 	std::string name;
 	GeoCoord	geocoordinates;
+    int price;
 };
 
 struct StreetSegment
