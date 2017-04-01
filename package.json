@@ -1,0 +1,23 @@
+{
+  "name": "Silio",
+  "version": "1.0.0",
+  "description": "Messenger bot to help you plan your night",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lawrencechen98/Silio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lawrencechen98/Silio/issues"
+  },
+  "homepage": "https://github.com/lawrencechen98/Silio#readme",
+  "dependencies": {
+    "botbuilder": "^3.7.0"
+  }
+}
