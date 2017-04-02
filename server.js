@@ -37,7 +37,7 @@ bot.dialog('/', [
 
         var execFile = require('child_process').execFile;
 
-        execFile(__dirname + '/src/SilioNavTest',[__dirname + '/src/locationdata.txt', session.userData.lat, session.userData.lon, session.userData.cost, session.userData.distance], function(err, data) {
+        execFile('SilioNavTest',['locationdata.txt', session.userData.lat, session.userData.lon, session.userData.cost, session.userData.distance], function(err, data) {
             session.send("We in here!");
             if(err) {
                 session.send(err.toString());
