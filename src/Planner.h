@@ -27,6 +27,7 @@ class Planner{
     }
     std::vector<GeoCoord> findRoute(GeoCoord start, std::vector<Attraction> visiting);
 	int getTotalPrice(std::vector<Attraction> finalPlan);
+	double getTotalDistance(vector<GeoCoord> route , vector<NavSegment> &combinedSegments);
 
 private:
     MapLoader loader;
