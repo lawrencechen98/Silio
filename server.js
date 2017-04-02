@@ -42,7 +42,7 @@ bot.dialog('/', [
             if(err) {
                 console.log(err)
             }else
-                session.send(data);                       
+                session.send(data.toString());                       
         }); 
         session.send("Perfect. Let me plan your night:");
     }
