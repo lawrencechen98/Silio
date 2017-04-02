@@ -19,20 +19,22 @@ vector<Attraction> Planner::getPlan(GeoCoord& start, int maxCost, int maxDist, s
     vector<Attraction> cat4 = loader.getCat(4);
     vector<Attraction> cat5 = loader.getCat(5);
     
-    vector<int[3]> catCombo;
+    vector<int*> catCombo;
     
-    int minOfRange[5] = {0, 6, 11, 21, 31};
+    int minOfRange[] = {0, 6, 11, 21, 31};
     
     for(int i = 1; i <= 5; i++){
         for(int j = 1; j <= 5; j++){
             for(int k = 1; k<= 5; k++){
                 if(minOfRange[i-1] + minOfRange[j-1] + minOfRange[k-1] < maxCost){
-                    int combo[3] = {i, j, k};
+                    int combo[3]  = {i, j, k};
                     catCombo.push_back(combo);
                 }
             }
         }
     }
+    
+    
     
     vector<Attraction> currentPlan;
     return currentPlan;
