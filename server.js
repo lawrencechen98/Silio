@@ -35,10 +35,10 @@ bot.dialog('/', [
     function (session, results) {
         session.userData.distance = results.response;
 
-
         var execFile = require('child_process').execFile;
 
         execFile('./src/SilioNavTest',['./src/locationdata.txt', session.userData.lat, session.userData.lon, session.userData.cost, session.userData.distance], function(err, data) {
+            session.send("We in here!");
             if(err) {
                 console.log(err)
             }else
