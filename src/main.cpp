@@ -4,21 +4,22 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include "Planner.h"
 using namespace std;
 
 
 void printDirectionsRaw(string start, string end, vector<NavSegment>& navSegments);
-void printDirections(string start, string end, vector<NavSegment>& navSegments);
+void printDirections(/*string start, string end, */vector<NavSegment>& navSegments);
 
 int main(int argc, char *argv[])
 {
     bool raw = false;
-    if (argc == 5  &&  strcmp(argv[4], "-raw") == 0)
+    if (argc == 7  &&  strcmp(argv[6], "-raw") == 0)
     {
         raw = true;
         argc--;
     }
-    if (argc != 4)
+    if (argc != 6)
     {
         cout << "Usage: BruinNav mapdata.txt \"start attraction\" \"end attraction name\"" << endl
         << "or" << endl
@@ -26,9 +27,9 @@ int main(int argc, char *argv[])
         return 1;
     }
     
-    Navigator nav;
+    Planner planner;
     
-    if ( ! nav.loadMapData(argv[1]))
+    if ( ! planner.loadMapData(argv[1]))
     {
         cout << "Map data file was not found or has bad format: " << argv[1] << endl;
         return 1;
@@ -37,10 +38,23 @@ int main(int argc, char *argv[])
     if ( ! raw)
         cout << "Routing..." << flush;
     
-    string start = argv[2];
-    string end = argv[3];
-    vector<NavSegment> navSegments;
+    string start1 = argv[2];
+    string start2 = argv[3];
+    GeoCoord start(start1, start2);
+
     
+    vector<NavSegment> navSegments;
+    vector<Attraction> planAttractions;
+    
+    planAttractions = planner.getPlan(start, stoi(argv[4]), stod(argv[5]), navSegments);
+    cout<<endl;
+    for(int i = 0; i < planAttractions.size(); i++){
+        cout<<planAttractions[i].name<<": $"<<planAttractions[i].price<<endl;
+    }
+    cout<<endl<<endl;
+    printDirections(navSegments);
+}
+    /*
     NavResult result = nav.navigate(start, end, navSegments);
     if ( ! raw)
         cout << endl;
@@ -90,13 +104,13 @@ void printDirectionsRaw(string start, string end, vector<NavSegment>& navSegment
         }
     }
 }
-
-void printDirections(string start, string end, vector<NavSegment>& navSegments)
+*/
+void printDirections(/*string start, string end, */vector<NavSegment>& navSegments)
 {
     cout.setf(ios::fixed);
     cout.precision(2);
     
-    cout << "You are starting at: " << start << endl;
+    //cout << "You are starting at: " << start << endl;
     
     double totalDistance = 0;
     string thisStreet;
@@ -133,7 +147,7 @@ void printDirections(string start, string end, vector<NavSegment>& navSegments)
     if (distSinceLastTurn > 0)
         cout << "Proceed " << distSinceLastTurn << " miles "
         << directionOfLine(effectiveSegment) << " on " << thisStreet << endl;
-    cout << "You have reached your destination: " << end << endl;
+    //cout << "You have reached your destination: " << end << endl;
     cout.precision(1);
     cout << "Total travel distance: " << totalDistance << " miles" << endl;
 }
