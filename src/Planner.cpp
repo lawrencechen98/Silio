@@ -11,7 +11,7 @@
 #include "Planner.h"
 using namespace std;
 
-vector<Attraction> Planner::getPlan(GeoCoord& start, int maxCost, int maxDist, std::vector<NavSegment> directions){
+vector<Attraction> Planner::getPlan(GeoCoord& start, int maxCost, int maxDist, std::vector<NavSegment> &directions){
     
     vector<Attraction> cat1 = loader.getCat(1);
     vector<Attraction> cat2 = loader.getCat(2);
@@ -38,7 +38,7 @@ vector<Attraction> Planner::getPlan(GeoCoord& start, int maxCost, int maxDist, s
     return currentPlan;
 }
 
-vector<GeoCoord> Planner::findRoute(GeoCoord start, GeoCoord visiting[]) {
+vector<GeoCoord> Planner::findRoute(GeoCoord start, vector<GeoCoord> visiting) {
     vector<GeoCoord> finalRoute;
     finalRoute.push_back(start);
     
@@ -46,10 +46,10 @@ vector<GeoCoord> Planner::findRoute(GeoCoord start, GeoCoord visiting[]) {
         int closestIdx = 0;
         int closestDist = distanceEarthMiles(start, visiting[0]);
 
-        for (int j = 1; j < 3-i, j++) {
+        for (int j = 1; j < 3-i; j++) {
             if (distanceEarthMiles(start, visiting[j]) < closestDist) {
                 closestIdx = j;
-                closestDist = distanceEarthMiles(start, visiting[j]);
+                closestDist = distanceEarthMiles(finalRoute.back(), visiting[j]);
             }
         }
         finalRoute.push_back(visiting[closestIdx]);
