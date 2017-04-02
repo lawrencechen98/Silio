@@ -13,10 +13,16 @@ public:
 	bool load(string mapFile);
 	size_t getNumSegments() const;
 	bool getSegment(size_t segNum, StreetSegment& seg) const;
+    vector<Attraction> getCat(int num) const;
     
 private:
-    vector<Attraction> attractions;
     vector<StreetSegment> streetSegments;
+
+    vector<Attraction> cat1;
+    vector<Attraction> cat2;
+    vector<Attraction> cat3;
+    vector<Attraction> cat4;
+    vector<Attraction> cat5;
 };
 
 MapLoaderImpl::MapLoaderImpl()
@@ -95,7 +101,8 @@ bool MapLoaderImpl::load(string mapFile)
                     newAttraction.geocoordinates = GeoCoord(lat, lon);
                     newAttraction.price = 0;
                     newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
-                    attractions.push_back(newAttraction);
+                    cat1.push_back(newAttraction);
+
                 }else{
                     string lon = attraction.substr(0, attraction.find("|"));
                     while(lon[lon.size()-1] == ' ')
@@ -106,7 +113,16 @@ bool MapLoaderImpl::load(string mapFile)
                     newAttraction.geocoordinates = GeoCoord(lat, lon);
                     newAttraction.price = stoi(attraction);
                     newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
-                    attractions.push_back(newAttraction);
+                    if (newAttraction.price >= 31) 
+                        cat5.push_back(newAttraction);
+                    else if (newAttraction.price  > 20) 
+                        cat4.push_back(newAttraction);
+                    else if (newAttraction.price > 10) 
+                        cat3.push_back(newAttraction);
+                    else if (newAttraction.price > 5)
+                        cat2.push_back(newAttraction);
+                    else
+                        cat1.push_back(newAttraction);
                 }
             }
             streetSegments.push_back(newStreet);    //push new street into vectors of street
@@ -117,6 +133,33 @@ bool MapLoaderImpl::load(string mapFile)
     else{
         return false;
     }
+}
+
+vector<Attraction> MapLoaderImpl::getCat(int num) const {
+    switch(num) {
+        case 1: {
+            return cat1;
+            break;
+        }
+        case 2: {
+            return cat2;
+            break;
+        }
+        case 3: {
+            return cat3;
+            break;
+        }
+        case 4: {
+            return cat4;
+            break;
+        }
+        case 5: {
+            return cat5;
+            break;
+        }
+    }
+    vector<Attraction> a;
+    return a;
 }
 
 size_t MapLoaderImpl::getNumSegments() const
