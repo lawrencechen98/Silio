@@ -187,6 +187,10 @@ MapLoader::MapLoader()
 	m_impl = new MapLoaderImpl;
 }
 
+vector<Attraction> MapLoader::getCat(int num) const{
+    return m_impl->getCat(num);
+}
+
 MapLoader::~MapLoader()
 {
 	delete m_impl;

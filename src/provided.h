@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <random>
 
 struct GeoCoord
 {
@@ -60,6 +61,7 @@ public:
       // We prevent a MapLoader object from being copied or assigned.
     MapLoader(const MapLoader&) = delete;
     MapLoader& operator=(const MapLoader&) = delete;
+    std::vector<Attraction> getCat(int num) const;
 private:
     MapLoaderImpl* m_impl;
 };
@@ -204,6 +206,17 @@ inline double angleOfLine(const GeoSegment& line1)
 		result += 360;
 
 	return result;
+}
+
+inline
+int randInt(int min, int max)
+{
+    if (max < min)
+        std::swap(max, min);
+    static std::random_device rd;
+    static std::mt19937 generator(rd());
+    std::uniform_int_distribution<> distro(min, max);
+    return distro(generator);
 }
 
 #endif // PROVIDED_INCLUDED
