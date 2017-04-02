@@ -96,3 +96,10 @@ vector<GeoCoord> Planner::findRoute(GeoCoord start, vector<Attraction> visiting)
     finalRoute.push_back(start);
     return finalRoute;
 }
+int Planner::getTotalPrice(vector<Attraction> finalPath) {
+	int price = 0;
+	for (int i = 0; i < finalPath.size(); i++) {
+		price += finalPath[i].price;
+	}
+	return price;
+}

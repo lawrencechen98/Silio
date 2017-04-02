@@ -25,7 +25,8 @@ class Planner{
         } else
             return false;
     }
-    std::vector<GeoCoord> findRoute(GeoCoord start, std::vector<Attraction> visiting);
+    std::vector<GeoCoord> findRoute(GeoCoord start, std::vector<GeoCoord> visiting);
+	int getTotalPrice(vector<Attraction> finalPlan);
 
 private:
     MapLoader loader;
