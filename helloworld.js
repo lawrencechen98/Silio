@@ -19,18 +19,27 @@ bot.dialog('/', [
             useNativeControl: true
         };
         locationDialog.getLocation(session, options);
+        builder.Prompts.text(session, "Hello... What's your latitude?");
     },
     function (session, results) {
-        session.userData.start = results.response;
-        builder.Prompts.text(session, "Okay, now to where?"); 
+        session.userData.lat = results.response;
+        builder.Prompts.text(session, "Okay, now to what's your longitude?"); 
     },
     function (session, results) {
-        session.userData.end = results.response;
+        session.userData.lon = results.response;
+        builder.Prompts.text(session, "How much do you want to spend?"); 
+    },
+    function (session, results) {
+        session.userData.cost = results.response;
+        builder.Prompts.text(session, "How far are you willing to drive in total?"); 
+    },
+    function (session, results) {
+        session.userData.distance = results.response;
 
 
         var execFile = require('child_process').execFile;
 
-        execFile('./MyNav',['./src/locationdata.txt', session.userData.start, session.userData.end], function(err, data) {
+        execFile('./src/SilioNavTest',['./src/locationdata.txt', session.userData.lat, session.userData.lon, session.userData.cost, session.userData.distance], function(err, data) {
             if(err) {
                 console.log(err)
             }else

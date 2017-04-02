@@ -16,20 +16,22 @@ class Planner{
     public:
     Planner(){}
     ~Planner(){}
-    std::vector<Attraction> getPlan(GeoCoord& start, int maxCost, int maxDist, std::vector<NavSegment> &directions);
+    std::vector<Attraction> getPlan(GeoCoord& start, int maxCost, double maxDist, std::vector<NavSegment> &directions);
 
     bool loadMapData(std::string mapFile){
         //call member instance of MapLoader to load map data from mapFile text file
-        if (loader.load(mapFile)) {
+        if (loader.load(mapFile) && nav.loadMapData(mapFile)) {
             return true;
         } else
             return false;
     }
     std::vector<GeoCoord> findRoute(GeoCoord start, std::vector<Attraction> visiting);
 	int getTotalPrice(std::vector<Attraction> finalPlan);
+	double getTotalDistance(std::vector<GeoCoord> route , std::vector<NavSegment> &combinedSegments);
 
 private:
     MapLoader loader;
+    Navigator nav;
 };
 
 #endif /* Planner_h */
