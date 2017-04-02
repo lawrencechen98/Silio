@@ -34,9 +34,28 @@ vector<Attraction> Planner::getPlan(GeoCoord& start, int maxCost, int maxDist, s
         }
     }
     
-    
-    
     vector<Attraction> currentPlan;
     return currentPlan;
+}
+
+vector<GeoCoord> Planner::findRoute(GeoCoord start, GeoCoord visiting[]) {
+    vector<GeoCoord> finalRoute;
+    finalRoute.push_back(start);
     
+    for (int i = 0; i < 3; i++) {
+        int closestIdx = 0;
+        int closestDist = distanceEarthMiles(start, visiting[0]);
+
+        for (int j = 1; j < 3-i, j++) {
+            if (distanceEarthMiles(start, visiting[j]) < closestDist) {
+                closestIdx = j;
+                closestDist = distanceEarthMiles(start, visiting[j]);
+            }
+        }
+        finalRoute.push_back(visiting[closestIdx]);
+        visiting.erase(visiting.begin()+closestIdx);
+    }
+    
+    finalRoute.push_back(start);
+    return finalRoute;
 }

@@ -17,7 +17,11 @@ class Planner{
         Planner(){}
         ~Planner(){}
         
-        std::vector<Attraction> getPlan(GeoCoord& start, int maxCost, int maxDist, std::vector<NavSegment> directions);
+        std::vector<Attraction> getPlan(GeoCoord& start, 
+            int maxCost, 
+            int maxDist, 
+            std::vector<NavSegment> directions);
+
         
         bool loadMapData(std::string mapFile)
         {
@@ -26,8 +30,8 @@ class Planner{
                 return true;
             } else
                 return false;
-        }
-        
+        vector<GeoCoord> findRoute(GeoCoord start, GeoCoord visiting[]); 
+   }  
         
         
 private:
