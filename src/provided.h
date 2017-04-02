@@ -136,7 +136,7 @@ public:
     Navigator();
     ~Navigator();
     bool loadMapData(std::string mapFile);
-    NavResult navigate(std::string start, std::string end, std::vector<NavSegment>& directions) const;
+    NavResult navigate(GeoCoord start, GeoCoord end, std::vector<NavSegment>& directions) const;
       // We prevent a Navigator object from being copied or assigned.
     Navigator(const Navigator&) = delete;
     Navigator& operator=(const Navigator&) = delete;

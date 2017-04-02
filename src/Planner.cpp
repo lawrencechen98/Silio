@@ -103,3 +103,16 @@ int Planner::getTotalPrice(vector<Attraction> finalPath) {
 	}
 	return price;
 }
+double Planner::getTotalDistance(vector<GeoCoord> route, vector<NavSegment> &combinedSegments) {
+	double distance = 0;
+	Navigator nav;
+	for (int i = 0; i+1 < route.size(); i++) {
+		vector<NavSegment> tempSegments;
+		nav.navigate(route[i], route[i + 1], tempSegments);
+		for (int j = 0; j < tempSegments.size(); j++) {
+			combinedSegments.push_back(tempSegments[j]);
+			distance += tempSegments[j].m_distance;
+		}
+	}
+	return distance;
+}

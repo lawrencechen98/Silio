@@ -14,7 +14,7 @@ public:
     NavigatorImpl();
     ~NavigatorImpl();
     bool loadMapData(string mapFile);
-    NavResult navigate(string start, string end, vector<NavSegment>& directions) const;
+    NavResult navigate(GeoCoord start, GeoCoord end, vector<NavSegment>& directions) const;
     
 private:
     
@@ -76,7 +76,7 @@ bool NavigatorImpl::loadMapData(string mapFile)
 
 
 
-NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &directions) const
+NavResult NavigatorImpl::navigate(GeoCoord start, GeoCoord end, vector<NavSegment> &directions) const
 {
     MyMap<GeoCoord, GeoCoord> prevWaypoint;         //map of each coordinates to its previous waypoint it originates from
     vector<weightedCoord> finishedVector;           //vector of already processed weightedCoords, list of visited nodes
@@ -84,25 +84,21 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
     MyMap<GeoCoord, double> coordWeights;           //map of each coord to its last cost of travel to keep track of travel distance
     
     //get start coordinate and get all associated StreetSegments associated
-    GeoCoord startCoord;
-    attMap.getGeoCoord(start, startCoord);
-    vector<StreetSegment> startSegments = segMap.getSegments(startCoord);
+    vector<StreetSegment> startSegments = segMap.getSegments(start);
     if(startSegments.empty()){
         return NAV_BAD_SOURCE;
     }
     //get end coordinate and get all associated StreetSegments associated
-    GeoCoord endCoord;
-    attMap.getGeoCoord(end, endCoord);
-    vector<StreetSegment> endSegments = segMap.getSegments(endCoord);
+    vector<StreetSegment> endSegments = segMap.getSegments(end);
     if(endSegments.empty()){
         return NAV_BAD_DESTINATION;
     }
     
     //create a weightedCoord for starting coord
     //set its weight with initial heuristic value, and push onto priority queue
-    weightedCoord startWeight(startCoord);
+    weightedCoord startWeight(start);
     startWeight.distanceTraveled = 0;
-    startWeight.weight = startWeight.distanceTraveled + distanceEarthMiles(startCoord, endCoord);
+    startWeight.weight = startWeight.distanceTraveled + distanceEarthMiles(start, end);
     weightedVector.push(startWeight);
     
     
@@ -112,14 +108,14 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
         
         finishedVector.push_back(cur);  //push current weightedCoord to the vector of finished coordinates
         
-        if(cur.coord == endCoord){  //if the current coord is equal to end coordinate, then path found!
+        if(cur.coord == end){  //if the current coord is equal to end coordinate, then path found!
             directions.clear();
             stack<NavSegment> path; //stack to use LIFO property to reverse order as nodes backtrack
             
             //start with end coordinateusing the map of previous waypoints, trace and backtrack path taken to arrive at each coordinate
-            GeoCoord* cur = &endCoord;
+            GeoCoord* cur = &end;
             
-            while(cur != nullptr && !(*cur == startCoord)){ //loop until the pointer hits nullptr or backtrack back to the start
+            while(cur != nullptr && !(*cur == start)){ //loop until the pointer hits nullptr or backtrack back to the start
         
                 vector<StreetSegment> curStreets = segMap.getSegments(*cur);
                 
@@ -167,9 +163,9 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
             
             for(auto endSeg: endSegments){  //for each of the segments, check
                 if(endSeg == seg){          //if they are same as the segments associated with end coordinate
-                    prevWaypoint.associate(endCoord, cur.coord);    //associate end coord's previous node to be current coord
-                    weightedCoord newWeight(endCoord);
-                    newWeight.distanceTraveled = cur.distanceTraveled + distanceEarthMiles(cur.coord, endCoord);
+                    prevWaypoint.associate(end, cur.coord);    //associate end coord's previous node to be current coord
+                    weightedCoord newWeight(end);
+                    newWeight.distanceTraveled = cur.distanceTraveled + distanceEarthMiles(cur.coord, end);
                     newWeight.weight = newWeight.distanceTraveled;
                     coordWeights.associate(newWeight.coord, newWeight.distanceTraveled);
                     weightedVector.push(newWeight); //push end coordinate to vector of to-be processed nodes
@@ -194,7 +190,7 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
                 //update current coord's weight and travel cost
                 weightedCoord newWeight(nextCoord);
                 newWeight.distanceTraveled = cur.distanceTraveled + distanceEarthMiles(cur.coord, nextCoord);
-                newWeight.weight = newWeight.distanceTraveled + distanceEarthMiles(nextCoord, endCoord);
+                newWeight.weight = newWeight.distanceTraveled + distanceEarthMiles(nextCoord, end);
                 
                 double* oldWeight = coordWeights.find(nextCoord);   //find the weight/cost of visiting this same coord last time
                 //if it costs less to visit this coord this time, process it, otherwise ignore it
@@ -212,7 +208,7 @@ NavResult NavigatorImpl::navigate(string start, string end, vector<NavSegment> &
             //update current coord's weight and travel cost
             weightedCoord newWeight(nextCoord);
             newWeight.distanceTraveled = cur.distanceTraveled + distanceEarthMiles(cur.coord, nextCoord);
-            newWeight.weight = newWeight.distanceTraveled + distanceEarthMiles(nextCoord, endCoord);
+            newWeight.weight = newWeight.distanceTraveled + distanceEarthMiles(nextCoord, end);
             
             double* oldWeight = coordWeights.find(nextCoord);   //find the weight/cost of visiting this same coord last time
             //if it costs less to visit this coord this time, process it, otherwise ignore it
@@ -247,7 +243,7 @@ bool Navigator::loadMapData(string mapFile)
     return m_impl->loadMapData(mapFile);
 }
 
-NavResult Navigator::navigate(string start, string end, vector<NavSegment>& directions) const
+NavResult Navigator::navigate(GeoCoord start, GeoCoord end, vector<NavSegment>& directions) const
 {
     return m_impl->navigate(start, end, directions);
 }
