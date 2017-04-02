@@ -4,27 +4,27 @@
 #include <iostream>
 using namespace std;
 
-class PriceMapperImpl
+class AttractionMapperImpl
 {
 public:
-	PriceMapperImpl();
-	~PriceMapperImpl();
+	AttractionMapperImpl();
+	~AttractionMapperImpl();
 	void init(const MapLoader& ml);
-	bool getPrice(string attraction, int& price) const;
+	bool getGeoCoord(string attraction, GeoCoord& gc) const;
     
 private:
-    MyMap<string, int> map;
+    MyMap<string, GeoCoord> map;
 };
 
-PriceMapperImpl::PriceMapperImpl()
+AttractionMapperImpl::AttractionMapperImpl()
 {
 }
 
-PriceMapperImpl::~PriceMapperImpl()
+AttractionMapperImpl::~AttractionMapperImpl()
 {
 }
 
-void PriceMapperImpl::init(const MapLoader& ml)
+void AttractionMapperImpl::init(const MapLoader& ml)
 {
     for(int i = 0; i < ml.getNumSegments(); i++){   //for each segment loaded by the MapLoader
         StreetSegment seg;
@@ -33,21 +33,21 @@ void PriceMapperImpl::init(const MapLoader& ml)
             string name = seg.attractions[j].name;
             for(int n = 0; n < name.size(); n++)    //obtain name of attraction and set to all lower case
                 name[n] = tolower(name[n]);
-            map.associate(name, seg.attractions[j].price); //associate attraction name with the price of said attraction
+            map.associate(name, seg.attractions[j].geocoordinates); //associate attraction name with the coordinates of said attraction
         }
     }
 }
 
-bool PriceMapperImpl::getPrice(string attraction, int& price) const
+bool AttractionMapperImpl::getGeoCoord(string attraction, GeoCoord& gc) const
 {
     string name = attraction;
     for(int n = 0; n < name.size(); n++)    //make name all lowercase to be case insensitive
         name[n] = tolower(name[n]);
-    const int* price = map.find(name); //use map to find price mapped to name of attraction
-    if(price == nullptr)
+    const GeoCoord* coord = map.find(name); //use map to find coordinate mapped to name of attraction
+    if(coord == nullptr)
         return false;
     else{
-        price = *price;
+        gc = *coord;
         return true;
     }
 }
@@ -57,22 +57,22 @@ bool PriceMapperImpl::getPrice(string attraction, int& price) const
 // These functions simply delegate to AttractionMapperImpl's functions.
 // You probably don't want to change any of this code.
 
-PriceMapper::PriceMapper()
+AttractionMapper::AttractionMapper()
 {
-	m_impl = new PriceMapperImpl;
+	m_impl = new AttractionMapperImpl;
 }
 
-PriceMapper::~PriceMapper()
+AttractionMapper::~AttractionMapper()
 {
 	delete m_impl;
 }
 
-void PriceMapper::init(const MapLoader& ml)
+void AttractionMapper::init(const MapLoader& ml)
 {
 	m_impl->init(ml);
 }
 
-bool PriceMapper::getPrice(string attraction, int& price) const
+bool AttractionMapper::getGeoCoord(string attraction, GeoCoord& gc) const
 {
-	return m_impl->getPrice(attraction, price);
+	return m_impl->getGeoCoord(attraction, gc);
 }
