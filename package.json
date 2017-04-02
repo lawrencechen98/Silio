@@ -19,6 +19,7 @@
   "homepage": "https://github.com/lawrencechen98/Silio#readme",
   "dependencies": {
     "botbuilder": "^3.7.0",
-    "botbuilder-location": "^1.1.0"
+    "botbuilder-location": "^1.1.0",
+    "restify": "^4.3.0"
   }
 }
