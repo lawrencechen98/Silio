@@ -100,6 +100,7 @@ bool MapLoaderImpl::load(string mapFile)
                     string lon = attraction;
                     newAttraction.geocoordinates = GeoCoord(lat, lon);
                     newAttraction.price = 0;
+                    newStreet.attractions.push_back(newAttraction); //push new attraction into vector of attraction of new street
                     cat1.push_back(newAttraction);
 
                 }else{
