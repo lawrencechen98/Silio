@@ -40,7 +40,7 @@ bot.dialog('/', [
         execFile('./src/SilioNavTest',['./src/locationdata.txt', session.userData.lat, session.userData.lon, session.userData.cost, session.userData.distance], function(err, data) {
             session.send("We in here!");
             if(err) {
-                session.send("error");
+                session.send(err);
                 console.log(err)
             }else {
                 session.send("success");
