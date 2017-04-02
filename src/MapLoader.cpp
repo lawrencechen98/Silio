@@ -13,6 +13,7 @@ public:
 	bool load(string mapFile);
 	size_t getNumSegments() const;
 	bool getSegment(size_t segNum, StreetSegment& seg) const;
+    vector<Attraction> getCat(int num) const;
     
 private:
     vector<StreetSegment> streetSegments;
@@ -131,6 +132,33 @@ bool MapLoaderImpl::load(string mapFile)
     else{
         return false;
     }
+}
+
+vector<Attraction> MapLoaderImpl::getCat(int num) const {
+    switch(num) {
+        case 1: {
+            return cat1;
+            break;
+        }
+        case 2: {
+            return cat2;
+            break;
+        }
+        case 3: {
+            return cat3;
+            break;
+        }
+        case 4: {
+            return cat4;
+            break;
+        }
+        case 5: {
+            return cat5;
+            break;
+        }
+    }
+    vector<Attraction> a;
+    return a;
 }
 
 size_t MapLoaderImpl::getNumSegments() const
